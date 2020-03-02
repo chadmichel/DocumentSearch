@@ -1,0 +1,26 @@
+
+<div class="container">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="input-group">
+            <input [(ngModel)]="query" type="text" class="form-control" /> 
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" (click)="search()">Go!</button>
+            </span>
+        </div><!-- /input-group -->
+    </div><!-- /.col-lg-4 -->
+</div><!-- /.row -->
+</div>
+
+
+<div class="container">
+
+    <div *ngFor="let item of result.Items" class="row">
+        <div class="col-lg-4">
+            <a href="{{item.FilePath}}">Link</a>
+        </div>
+        <div class="col-lg-4">
+            <span [innerHTML]="item.Highlight"></span>
+        </div>
+    </div>
+</div>
