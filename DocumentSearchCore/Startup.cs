@@ -31,6 +31,11 @@ namespace DocumentSearchCore
         {
             services.AddControllers();
             services.AddSpaStaticFiles(config => { config.RootPath = "../DocumentSearchClient"; });
+            
+            services.Add(new ServiceDescriptor(typeof(ILogger), new Logger()));
+            services.Add(new ServiceDescriptor(typeof(IElasticAccess), typeof(ElasticAccess), ServiceLifetime.Transient));
+            services.Add(new ServiceDescriptor(typeof(IDocumentManager), typeof(DocumentManager), ServiceLifetime.Transient));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,11 +51,7 @@ namespace DocumentSearchCore
             app.UseRouting();
 
             app.UseAuthorization();
-
-            // app.UseMvc(routes =>
-            // {
-            //     routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
-            // });
+            
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
             
             
@@ -64,6 +65,11 @@ namespace DocumentSearchCore
                 }
             });
             
+            LogRoutes(actionDescriptorCollectionProvider);
+        }
+
+        private void LogRoutes(IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
+        {
             var r = actionDescriptorCollectionProvider.ActionDescriptors.Items
                 .Select(x => new RouteInfo {
                     Action = x.RouteValues["Action"],
@@ -74,7 +80,6 @@ namespace DocumentSearchCore
                 })
                 .OrderBy(r => r.Template)
                 .ToList();
-
 
             foreach (var route in r)
             {
