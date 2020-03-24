@@ -1,4 +1,4 @@
 export interface SearchResultItem {
-    FilePath: string;
-    Highlight: string;
+    filePath: string;
+    highlight: string;
 }

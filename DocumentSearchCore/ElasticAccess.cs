@@ -1,42 +1,68 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Nest;
 
-namespace DocumentSearch
+namespace DocumentSearchCore
 {
-    public class SearchController : ApiController
+
+    public interface IElasticAccess
     {
-        private IDocumentManager _documentManager;
+        Task IndexDocument(string fileName, string filePath, string contents);
         
-        public SearchController()
+        Task<IList<SearchResultItem>> Search(string query);
+    }
+    
+    public class ElasticAccess : IElasticAccess
+    {
+        
+        private static ElasticClient CreateElasticClient()
         {
-            
+            // Use ElasticSearch to index the document
+            var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+                .DefaultIndex("docs2");
+            var client = new ElasticClient(settings);
+            return client;
+        }
+
+        private ElasticClient Client
+        {
+            get { return CreateElasticClient(); }
+        }
+
+        public async Task IndexDocument(string fileName, string filePath, string contents)
+        {
+            var id = HashUtility.Hash(filePath);
+
+            var doc = new Doc()
+            {
+                Id = id,
+                FileName = fileName,
+                Path = filePath,
+                Text =  contents
+            };
+            await CreateElasticClient().IndexDocumentAsync(doc);
         }
         
-        [HttpGet]
-        public SearchResult Search(string query)
+        public async Task<IList<SearchResultItem>> Search(string query)
         {
-            var searchResult = new SearchResult()
-            {
-                Query =  query
-            };
             var items = new List<SearchResultItem>();
             
             if (query.Contains(" "))
             {
-                SearchPhrase(query, items);
+                items.AddRange(await SearchPhrase(query));
             }
 
-            SearchFuzzy(query, items);
-            
-            searchResult.Items = items.ToArray();
-            return searchResult;
-        }
+            items.AddRange(await SearchFuzzy(query));
 
-        void SearchFuzzy(string query, IList<SearchResultItem> items)
+            return items;
+        }
+        
+        async Task<IList<SearchResultItem>> SearchFuzzy(string query)
         {
-            var response = Program.CreateElasticClient().Search<Doc>(s => s
+            var items = new List<SearchResultItem>();
+            
+            var response = await Client.SearchAsync<Doc>(s => s
                 .From(0)
                 .Size(10)
                 .Query(q => q
@@ -56,6 +82,9 @@ namespace DocumentSearch
                     {
                         foreach (var highlightItem in highlight.Value)
                         {
+                            if (items.Count > 50)
+                                return items;
+
                             items.Add(new SearchResultItem()
                             {
                                 FilePath =  hit.Source.FileName,
@@ -65,11 +94,15 @@ namespace DocumentSearch
                     }
                 }   
             }
+
+            return items;
         }
-        
-        void SearchPhrase(string phrase, IList<SearchResultItem> items)
+
+        async Task<IList<SearchResultItem>> SearchPhrase(string phrase)
         {
-            var response = Program.CreateElasticClient().Search<Doc>(s => s
+            var items = new List<SearchResultItem>();
+
+            var response = await Client.SearchAsync<Doc>(s => s
                 .From(0)
                 .Size(10)
                 .Query(q => q
@@ -94,7 +127,7 @@ namespace DocumentSearch
                         foreach (var highlightItem in highlight.Value)
                         {
                             if (items.Count > 50)
-                                return;
+                                return items;
                             
                             items.Add(new SearchResultItem()
                             {
@@ -105,6 +138,9 @@ namespace DocumentSearch
                     }
                 }   
             }
+
+            return items;
         }
+
     }
 }

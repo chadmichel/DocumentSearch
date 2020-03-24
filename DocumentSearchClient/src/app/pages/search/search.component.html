@@ -13,14 +13,13 @@
 </div>
 
 
-<div class="container">
-
-    <div *ngFor="let item of result.Items" class="row">
+<div *ngIf="hasItems" class="container">
+    <div *ngFor="let item of result.items" class="row">
         <div class="col-lg-4">
-            <a href="{{item.FilePath}}">Link</a>
+            <a href="/Downloader/{{item.filePath}}">Link</a>
         </div>
         <div class="col-lg-4">
-            <span [innerHTML]="item.Highlight"></span>
+            <span [innerHTML]="item.highlight"></span>
         </div>
     </div>
 </div>

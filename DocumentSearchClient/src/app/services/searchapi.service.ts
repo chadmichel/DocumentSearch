@@ -8,8 +8,7 @@ import { SearchResult } from 'src/dto/SearchResult';
 export class SearchapiService {
 
 
-  baseUrl = 'http://localhost:5150/api/';
-
+  baseUrl = '/';
 
   constructor(private http: HttpClient) { }
 

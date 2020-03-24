@@ -2,32 +2,41 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="$USER_HOME$/Library/Caches/Rider2019.3/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/Library/Caches/Rider2019.3/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_DocumentSearch.1892515139.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2019.3/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_DocumentSearchCore.-1020968989.00" t="ExcludeRecursive" />
     <e p="$APPLICATION_CONFIG_DIR$/consoles/db" t="IncludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p="appsettings.Development.json" t="Include" />
       <e p="appsettings.json" t="Include" />
       <e p="bin" t="ExcludeRecursive" />
+      <e p="Controllers" t="Include">
+        <e p="DownloaderController.cs" t="Include" />
+        <e p="SearchController.cs" t="Include" />
+        <e p="StaticFilesController.cs" t="Include" />
+      </e>
       <e p="CustomHeaderHandler.cs" t="Include" />
       <e p="Doc.cs" t="Include" />
       <e p="DocumentManager.cs" t="Include" />
-      <e p="DocumentSearch.csproj" t="IncludeRecursive" />
-      <e p="DocumentSearch.sln" t="IncludeFlat" />
-      <e p="DownloaderController.cs" t="Include" />
+      <e p="DocumentSearchCore.csproj" t="IncludeRecursive" />
+      <e p="DocumentSearchCore.sln" t="IncludeFlat" />
       <e p="ElasticAccess.cs" t="Include" />
       <e p="HashUtility.cs" t="Include" />
       <e p="Logger.cs" t="Include" />
-      <e p="obj" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive">
+        <e p="Debug" t="Include">
+          <e p="netcoreapp3.1" t="Include">
+            <e p="DocumentSearchCore.AssemblyInfo.cs" t="Include" />
+          </e>
+        </e>
+      </e>
       <e p="packages" t="ExcludeRecursive" />
-      <e p="packages.config" t="Include" />
       <e p="Program.cs" t="Include" />
       <e p="Properties" t="Include">
-        <e p="AssemblyInfo.cs" t="Include" />
+        <e p="launchSettings.json" t="Include" />
       </e>
-      <e p="SearchController.cs" t="Include" />
       <e p="SearchResult.cs" t="Include" />
       <e p="SearchResultItem.cs" t="Include" />
       <e p="Startup.cs" t="Include" />
-      <e p="StaticFilesController.cs" t="Include" />
+      <e p="WeatherForecast.cs" t="Include" />
     </e>
   </component>
 </project>

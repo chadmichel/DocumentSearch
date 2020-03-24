@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 
-namespace DocumentSearch
+namespace DocumentSearchCore.Controllers
 {
-    public class SearchController : ApiController
+    [ApiController]
+    [Route("[controller]")]
+    public class SearchController : ControllerBase
     {
         private IDocumentManager _documentManager;
         

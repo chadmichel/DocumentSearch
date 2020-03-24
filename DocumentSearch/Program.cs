@@ -8,15 +8,34 @@ using System.Web.Http.Cors;
 using Nest;
 using TikaOnDotNet.TextExtraction;
 using System.Web.Http.SelfHost;
+using com.sun.jmx.remote.protocol.iiop;
 using Elasticsearch.Net;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DocumentSearch
 {
     internal class Program
     {
+        public static IServiceProvider serviceProvider;
+        public static IConfiguration Config { get; set; }
         
         public async static Task Main(string[] args)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            Config = builder.Build();
+
+            var collection = new ServiceCollection();
+            
+            collection.AddScoped(typeof(ILogger), typeof(Logger));
+            collection.AddScoped(typeof(IElasticAccess), typeof(ElasticAccess));
+            collection.AddScoped(typeof(IDocumentManager), typeof(DocumentManager));
+            serviceProvider = collection.BuildServiceProvider();
+            
+            Console.WriteLine("Elastic:" + Config["ElasticUrl"]);
+            
             // Check the command line parameters
             if (args == null || args.Length == 0)
             {
@@ -28,6 +47,7 @@ namespace DocumentSearch
             //config.MessageHandlers.Add(new CustomHeaderHandler());
             config.EnableCors(new EnableCorsAttribute("*", headers: "*", methods: "*"));
             
+            
             config.Routes.MapHttpRoute(
                 "API Default", "api/{controller}/{id}", 
                 new { id = RouteParameter.Optional });
@@ -38,8 +58,9 @@ namespace DocumentSearch
 
             using (HttpSelfHostServer server = new HttpSelfHostServer(config))
             {
-                BuildIndex(args[0]);
-
+                //BuildIndex(args[0]);
+                await serviceProvider.GetService<IDocumentManager>().BuildIndex(args[0]);
+                
                 server.OpenAsync().Wait();
 
                 Console.WriteLine("Press enter to exit");
