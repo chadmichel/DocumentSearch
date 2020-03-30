@@ -87,7 +87,8 @@ namespace DocumentSearchCore
 
                             items.Add(new SearchResultItem()
                             {
-                                FilePath =  hit.Source.FileName,
+                                FilePath =  hit.Source.Path,
+                                FileName = hit.Source.FileName,
                                 Highlight = highlightItem
                             });
                         }
@@ -131,7 +132,8 @@ namespace DocumentSearchCore
                             
                             items.Add(new SearchResultItem()
                             {
-                                FilePath =  hit.Source.FileName,
+                                FilePath =  hit.Source.Path,
+                                FileName =  hit.Source.FileName,
                                 Highlight = highlightItem
                             });
                         }

@@ -11,14 +11,18 @@ namespace DocumentSearchCore.Controllers
     {
         [HttpGet]
         [Route("DownloadIt")]
-        public HttpResponseMessage Download(string query)
+        public FileResult Download(string query)
         {
-            var path = Path.Combine(StaticFilesController.basePath, query);
+            var path = query;
+
+            var fi = new FileInfo(path);
+            
             var response = new HttpResponseMessage();
             var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-            response.Content = new StreamContent(stream);
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            return response;
+
+            return File(stream, 
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
+                fi.Name);
         }
     }
 }

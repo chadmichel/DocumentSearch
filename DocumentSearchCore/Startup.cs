@@ -35,6 +35,7 @@ namespace DocumentSearchCore
             services.Add(new ServiceDescriptor(typeof(ILogger), new Logger()));
             services.Add(new ServiceDescriptor(typeof(IElasticAccess), typeof(ElasticAccess), ServiceLifetime.Transient));
             services.Add(new ServiceDescriptor(typeof(IDocumentManager), typeof(DocumentManager), ServiceLifetime.Transient));
+            services.AddHostedService<BackgroundTimer>();
             
         }
 
@@ -70,30 +71,13 @@ namespace DocumentSearchCore
 
         private void LogRoutes(IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
         {
-            var r = actionDescriptorCollectionProvider.ActionDescriptors.Items
-                .Select(x => new RouteInfo {
-                    Action = x.RouteValues["Action"],
-                    Controller = x.RouteValues["Controller"],
-                    Name = x.AttributeRouteInfo?.Name,
-                    Template = x.AttributeRouteInfo?.Template,
-                    Constraint = x.ActionConstraints == null ? "" : JsonConvert.SerializeObject(x.ActionConstraints)
-                })
-                .OrderBy(r => r.Template)
-                .ToList();
-
-            foreach (var route in r)
+            foreach (var route in actionDescriptorCollectionProvider.ActionDescriptors.Items)
             {
-                Console.WriteLine("c " + route.Controller + " " + route.Action + " " + route.Template);
+                var controller = route.RouteValues["Controller"];
+                var action = route.RouteValues["Action"];
+                var template = route.AttributeRouteInfo?.Template;
+                Console.WriteLine($"Controller={controller} Action={action} Template={template}");
             }
         }
-    }
-    
-    public class RouteInfo
-    {
-        public string Template { get; set; }
-        public string Name { get; set; }
-        public string Controller { get; set; }
-        public string Action { get; set; }
-        public string Constraint { get; set; }
     }
 }

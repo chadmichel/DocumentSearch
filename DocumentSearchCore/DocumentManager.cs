@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using DocumentSearch;
+using Microsoft.Extensions.Configuration;
 using TikaOnDotNet.TextExtraction;
 
 namespace DocumentSearchCore
@@ -15,11 +16,16 @@ namespace DocumentSearchCore
     {
         private readonly IElasticAccess _elasticAccess;
         private ILogger _logger;
+        private IConfiguration _configuration;
 
-        public DocumentManager(IElasticAccess elasticAccess, ILogger logger)
+        public DocumentManager(
+            IElasticAccess elasticAccess,
+            ILogger logger,
+            IConfiguration configuration)
         {
             _elasticAccess = elasticAccess;
             _logger = logger;
+            _configuration = configuration;
         }
         
         public async Task BuildIndex(string startPath)

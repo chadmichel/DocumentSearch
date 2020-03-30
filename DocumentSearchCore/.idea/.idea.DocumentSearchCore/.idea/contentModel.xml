@@ -7,6 +7,7 @@
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
       <e p="appsettings.Development.json" t="Include" />
       <e p="appsettings.json" t="Include" />
+      <e p="BackgroundTimer.cs" t="Include" />
       <e p="bin" t="ExcludeRecursive" />
       <e p="Controllers" t="Include">
         <e p="DownloaderController.cs" t="Include" />
@@ -20,6 +21,7 @@
       <e p="DocumentSearchCore.sln" t="IncludeFlat" />
       <e p="ElasticAccess.cs" t="Include" />
       <e p="HashUtility.cs" t="Include" />
+      <e p="Log_2020_3_30_8.txt" t="Include" />
       <e p="Logger.cs" t="Include" />
       <e p="obj" t="ExcludeRecursive">
         <e p="Debug" t="Include">

@@ -1,5 +1,6 @@
 
 <div class="container">
+
 <div class="row">
     <div class="col-lg-12">
         <div class="input-group">
@@ -16,10 +17,12 @@
 <div *ngIf="hasItems" class="container">
     <div *ngFor="let item of result.items" class="row">
         <div class="col-lg-4">
-            <a href="/Downloader/{{item.filePath}}">Link</a>
+            <a href="/Downloader/DownloadIt/?query={{item.filePath}}">
+                {{item.fileName}}
+            </a>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-12">
             <span [innerHTML]="item.highlight"></span>
         </div>
-    </div>
+    </div>    
 </div>
